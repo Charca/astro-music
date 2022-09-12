@@ -1,0 +1,32 @@
+---
+import Logo from './Logo.astro'
+---
+
+<div class="content">
+  <header class="codrops-header">
+    <a href="/" class="flex items-center font-bold text-xl">
+      <h1>
+        <span>astro</span>
+        <Logo />
+        <span class="text-orange-500">music</span>
+      </h1>
+    </a>
+  </header>
+</div>
+
+<style>
+  header a {
+    color: #000;
+  }
+
+  header a:hover {
+    color: var(--color-link);
+  }
+
+  h1 {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Playfair Display', serif;
+  }
+</style>

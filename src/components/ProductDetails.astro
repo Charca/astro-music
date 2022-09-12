@@ -1,0 +1,57 @@
+---
+export interface Props {
+  product: {
+    id: number
+    name: string
+    author: string
+    price: number
+    description: string
+  }
+}
+
+const { product } = Astro.props
+---
+
+<div class="details">
+  <div class="details__bg details__bg--down product-bg"></div>
+  <img
+    class="details__img product-image"
+    src={`/images/products/${product.id}.png`}
+    alt={product.name}
+  />
+  <div class="product-info">
+    <h2 class="details__title">
+      {product.name}
+    </h2>
+    <div
+      class="details__deco"
+      style={`background-image: url(/images/products/${product.id}.png);`}
+    >
+    </div>
+
+    <h3 class="details__subtitle">
+      {product.author}
+    </h3>
+    <div class="details__price">
+      ${product.price}
+    </div>
+    <p class="details__description">
+      {product.description}
+    </p>
+    <button class="details__addtocart">Add to cart</button>
+  </div>
+
+  <a href="/" class="details__close">
+    <svg
+      fill="#000"
+      stroke="currentColor"
+      viewBox="0 0 24 24"
+      xmlns="http://www.w3.org/2000/svg"
+      ><path
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+        d="M6 18L18 6M6 6l12 12"></path>
+    </svg>
+  </a>
+</div>

@@ -1,0 +1,20 @@
+<h2 id="counter">0</h2>
+
+<script>
+  const counterEl = document.getElementById('counter')
+  let count = 0
+
+  setInterval(() => {
+    count++
+    counterEl.innerHTML = `${count}`
+  }, 1000)
+</script>
+
+<style>
+  #counter {
+    position: absolute;
+    left: 30px;
+    font-size: 40px;
+    z-index: 2000;
+  }
+</style>

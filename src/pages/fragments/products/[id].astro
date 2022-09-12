@@ -1,0 +1,11 @@
+---
+import ProductDetails from '../../../components/ProductDetails.astro'
+
+const { id } = Astro.params
+const response = await fetch(
+  'https://music-api.charca.workers.dev/products/' + id
+)
+const data = await response.json()
+---
+
+<ProductDetails product={data} />
