@@ -54,7 +54,6 @@ function handleHomeToProductTransition(navigateEvent, toPath) {
         image.classList.remove('product-image')
         background.classList.remove('product-bg')
       }
-      // document.getElementById('container').scrollTop = 0
       updateTheDOMSomehow(data)
     })
   }

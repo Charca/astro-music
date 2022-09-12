@@ -1,8 +1,7 @@
 ---
-import Counter from '../components/Counter.astro'
-import Footer from '../components/Footer.astro'
 import Header from '../components/Header.astro'
 import '../styles/styles.css'
+import '../styles/transitions.css'
 
 export interface Props {
   title: string
@@ -25,12 +24,10 @@ const { title } = Astro.props
   </head>
   <body>
     <main>
-      <!-- <Counter /> -->
-      <Header />
+      <Header withAnimation />
       <div id="content">
         <slot />
       </div>
-      <Footer />
     </main>
   </body>
 </html>

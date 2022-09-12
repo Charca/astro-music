@@ -1,32 +1,119 @@
 ---
-import Logo from './Logo.astro'
+import Counter from './Counter.astro'
+
+const { withAnimation, withCounter } = Astro.props
+
+const className = 'waveWrapper ' + (withAnimation ? 'waveAnimation' : '')
 ---
 
-<div class="content">
-  <header class="codrops-header">
-    <a href="/" class="flex items-center font-bold text-xl">
-      <h1>
-        <span>astro</span>
-        <Logo />
-        <span class="text-orange-500">music</span>
-      </h1>
-    </a>
-  </header>
+<div class={className}>
+  {withCounter ? <Counter /> : ''}
+  <h1>Guitars & HTML</h1>
+  <div class="waveWrapperInner bgTop">
+    <div
+      class="wave waveTop"
+      style="background-image: url('/images/wave-top.png')"
+    >
+    </div>
+  </div>
+  <div class="waveWrapperInner bgMiddle">
+    <div
+      class="wave waveMiddle"
+      style="background-image: url('/images/wave-mid.png')"
+    >
+    </div>
+  </div>
+  <div class="waveWrapperInner bgBottom">
+    <div
+      class="wave waveBottom"
+      style="background-image: url('/images/wave-bot.png')"
+    >
+    </div>
+  </div>
 </div>
 
 <style>
-  header a {
-    color: #000;
-  }
-
-  header a:hover {
-    color: var(--color-link);
-  }
-
   h1 {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-family: 'Playfair Display', serif;
+    text-align: center;
+    color: white;
+    font-size: 5.5em !important;
+    z-index: 16;
+    position: relative;
+  }
+  @media screen and (max-width: 60em) {
+    h1 {
+      margin-top: 1.2em !important;
+      font-size: 4em !important;
+    }
+  }
+  @keyframes move_wave {
+    0% {
+      transform: translateX(0) translateZ(0) scaleY(1);
+    }
+    50% {
+      transform: translateX(-25%) translateZ(0) scaleY(0.55);
+    }
+    100% {
+      transform: translateX(-50%) translateZ(0) scaleY(1);
+    }
+  }
+  .waveWrapper {
+    overflow: hidden;
+    /* position: fixed; */
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: -2px;
+    height: 300px;
+    z-index: 1;
+  }
+  .waveWrapperInner {
+    position: absolute;
+    width: 100%;
+    overflow: hidden;
+    height: 100%;
+    bottom: -1px;
+    background-image: linear-gradient(to top, #86377b 20%, #27273c 80%);
+  }
+  .bgTop {
+    z-index: 15;
+    opacity: 0.5;
+  }
+  .bgMiddle {
+    z-index: 10;
+    opacity: 0.75;
+  }
+  .bgBottom {
+    z-index: 5;
+  }
+  .wave {
+    position: absolute;
+    left: 0;
+    width: 200%;
+    height: 100%;
+    background-repeat: repeat no-repeat;
+    background-position: 0 bottom;
+    transform-origin: center bottom;
+  }
+  .waveTop {
+    background-size: 50% 100px;
+  }
+  .waveAnimation .waveTop {
+    animation: move-wave 3s;
+    -webkit-animation: move-wave 3s;
+    -webkit-animation-delay: 1s;
+    animation-delay: 1s;
+  }
+  .waveMiddle {
+    background-size: 50% 120px;
+  }
+  .waveAnimation .waveMiddle {
+    animation: move_wave 10s linear infinite;
+  }
+  .waveBottom {
+    background-size: 50% 100px;
+  }
+  .waveAnimation .waveBottom {
+    animation: move_wave 15s linear infinite;
   }
 </style>

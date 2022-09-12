@@ -1,11 +1,14 @@
 ---
+import ProductSpecs from './ProductSpecs.astro'
+import Skeleton from './Skeleton.astro'
+
 export interface Props {
   product: {
     id: number
     name: string
     author: string
     price: number
-    description: string
+    description?: string
   }
 }
 
@@ -19,7 +22,7 @@ const { product } = Astro.props
     src={`/images/products/${product.id}.png`}
     alt={product.name}
   />
-  <div class="product-info">
+  <div class="details__info product-info">
     <h2 class="details__title">
       {product.name}
     </h2>
@@ -35,10 +38,16 @@ const { product } = Astro.props
     <div class="details__price">
       ${product.price}
     </div>
-    <p class="details__description">
+    {product.description ? (
+      <p class="details__description">
       {product.description}
-    </p>
-    <button class="details__addtocart">Add to cart</button>
+      </p>
+      <button class="details__addtocart">Add to cart</button>
+      <ProductSpecs />
+    ) : (
+      <Skeleton />
+    )}
+
   </div>
 
   <a href="/" class="details__close">

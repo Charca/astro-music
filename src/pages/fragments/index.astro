@@ -1,19 +1,31 @@
 ---
 import Card from '../../components/Card.astro'
+import Footer from '../../components/Footer.astro'
 
 const response = await fetch('https://music-api.charca.workers.dev/products')
 const data = await response.json()
 const products = data.results
 ---
 
-<div class="content">
+<div class="content home-content">
   <div class="grid">
     {
-      products.map(({ id, name, author, price }) => (
-        <div class="grid__item">
-          <Card id={id} name={name} author={author} price={price} />
-        </div>
-      ))
+      products.map((product) => {
+        const { id, name, author, price } = product
+        return (
+          <div class="grid__item">
+            <Card id={id} name={name} author={author} price={price} />
+          </div>
+        )
+      })
     }
   </div>
 </div>
+
+<Footer />
+
+<style>
+  .home-content {
+    margin-top: 30em;
+  }
+</style>
