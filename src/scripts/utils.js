@@ -56,3 +56,9 @@ export function getPathId(path) {
 export function updateTheDOMSomehow(data) {
   document.getElementById('content').innerHTML = data
 }
+
+export async function wait(timeout) {
+  return new Promise((resolve) => {
+    setTimeout(() => resolve(), timeout)
+  })
+}

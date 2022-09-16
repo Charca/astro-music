@@ -5,7 +5,15 @@ import {
   isBackNavigation,
   shouldNotIntercept,
   updateTheDOMSomehow,
+  wait,
 } from './utils'
+
+async function getFragment(toPath) {
+  const response = await fetch(`/fragments${toPath}`)
+  const data = await response.text()
+
+  return data
+}
 
 navigation.addEventListener('navigate', (navigateEvent) => {
   if (shouldNotIntercept(navigateEvent)) return
@@ -31,30 +39,59 @@ navigation.addEventListener('navigate', (navigateEvent) => {
 
 function handleHomeToProductTransition(navigateEvent, toPath) {
   const handler = async () => {
-    const response = await fetch(`/fragments${toPath}`)
-    const data = await response.text()
-
     if (!document.createDocumentTransition) {
+      const data = await getFragment(toPath)
       updateTheDOMSomehow(data)
       return
     }
 
-    const transition = document.createDocumentTransition()
-    const link = getLink(toPath)
-    const image = link.querySelector('.product__img')
-    const background = link.querySelector('.product__bg')
+    return new Promise(async (resolve) => {
+      const transition = document.createDocumentTransition()
+      const link = getLink(toPath)
+      const image = link.querySelector('.product__img')
+      const background = link.querySelector('.product__bg')
+      let hasShownTemplate = false
+      let htmlFragment = null
 
-    if (image && background) {
-      image.classList.add('product-image')
-      background.classList.add('product-bg')
-    }
-
-    transition.start(() => {
       if (image && background) {
-        image.classList.remove('product-image')
-        background.classList.remove('product-bg')
+        image.classList.add('product-image')
+        background.classList.add('product-bg')
       }
-      updateTheDOMSomehow(data)
+
+      getFragment(toPath).then((data) => {
+        // If we've shown a template and we are still on the same path,
+        // update the dom with the real data.
+        if (hasShownTemplate && location.pathname === toPath) {
+          updateTheDOMSomehow(data)
+          resolve()
+        } else {
+          htmlFragment = data
+        }
+      })
+
+      // Grace period to make an instant transition
+      await wait(200)
+
+      return transition.start(() => {
+        if (image && background) {
+          image.classList.remove('product-image')
+          background.classList.remove('product-bg')
+        }
+
+        const template = document.getElementById(
+          'product-template-' + getPathId(toPath)
+        )
+
+        if (htmlFragment !== null) {
+          // If the data has loaded by now, show it right away
+          updateTheDOMSomehow(htmlFragment)
+          resolve()
+        } else if (template) {
+          // Otherwhise, show a template that will be replaced by the real data once it arrives
+          updateTheDOMSomehow(template.innerHTML)
+          hasShownTemplate = true
+        }
+      })
     })
   }
 
@@ -63,8 +100,7 @@ function handleHomeToProductTransition(navigateEvent, toPath) {
 
 function handleProductToHomeTransition(navigateEvent, toPath, fromPath) {
   const handler = async () => {
-    const response = await fetch(`/fragments${toPath}`)
-    const data = await response.text()
+    const data = await getFragment(toPath)
 
     if (!document.createDocumentTransition) {
       updateTheDOMSomehow(data)

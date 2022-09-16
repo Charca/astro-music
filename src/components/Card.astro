@@ -8,10 +8,25 @@ export interface Props {
 
 const { id, name, author, price } = Astro.props
 const image_path = `/images/products/${id}.png`
+
+// A few products will take longer than usual to load (using an artifical server-side delay)
+const slowProducts = [2, 5, 7]
+const isSlow = slowProducts.indexOf(id) !== -1
+const url = `/products/${id}`
 ---
 
-<a href={`/products/${id}`}>
+<a href={url}>
   <div class="product">
+    {
+      isSlow ? (
+        <span
+          class="badge"
+          data-tooltip="This product has an artificial server-side delay and takes longer than usual to load."
+        >
+          ⏳ SLOW
+        </span>
+      ) : null
+    }
     <div class="product__bg"></div>
     <img class="product__img" src={image_path} alt={name} />
     <h2 class="product__title">{name}</h2>
@@ -19,3 +34,10 @@ const image_path = `/images/products/${id}.png`
     <div class="product__price">${price}</div>
   </div>
 </a>
+
+<style>
+  .badge {
+    position: absolute;
+    top: 120px;
+  }
+</style>

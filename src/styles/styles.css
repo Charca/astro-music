@@ -1,6 +1,5 @@
 article,
 aside,
-details,
 figcaption,
 figure,
 footer,
@@ -8,8 +7,7 @@ header,
 hgroup,
 main,
 nav,
-section,
-summary {
+section {
   display: block;
 }
 audio,
@@ -655,4 +653,46 @@ main {
   .dummy-menu {
     margin: 1.75em 1.5em 0 0;
   }
+}
+
+.badge {
+  padding-top: 0.125rem;
+  padding-bottom: 0.125rem;
+  padding-left: 0.625rem;
+  padding-right: 0.625rem;
+  margin-right: 0.5rem;
+  background-color: #ede9fe;
+  color: #5b21b6;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  font-weight: 500;
+  border-radius: 0.25rem;
+}
+
+[data-tooltip] {
+  position: relative;
+  cursor: help;
+}
+
+[data-tooltip]::after {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+  content: attr(data-tooltip);
+  left: 0;
+  top: calc(100% + 10px);
+  border-radius: 3px;
+  box-shadow: 0 0 5px 2px rgba(100, 100, 100, 0.6);
+  background-color: white;
+  z-index: 10;
+  padding: 8px;
+  width: 300px;
+  transform: translateY(-20px);
+  transition: all 150ms cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+[data-tooltip]:hover::after {
+  opacity: 1;
+  transform: translateY(0);
+  transition-duration: 300ms;
 }
