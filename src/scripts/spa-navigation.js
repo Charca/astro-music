@@ -51,16 +51,18 @@ function handleHomeToProductTransition(navigateEvent, toPath) {
       const background = link.querySelector('.product__bg')
       let hasShownTemplate = false
       let htmlFragment = null
+      let transition = null
 
       if (image && background) {
         image.classList.add('product-image')
         background.classList.add('product-bg')
       }
 
-      getFragment(toPath).then((data) => {
+      getFragment(toPath).then(async (data) => {
         // If we've shown a template and we are still on the same path,
         // update the dom with the real data.
         if (hasShownTemplate && location.pathname === toPath) {
+          await transition.finished
           updateTheDOMSomehow(data)
           resolve()
         } else {
@@ -71,7 +73,7 @@ function handleHomeToProductTransition(navigateEvent, toPath) {
       // Grace period to make an instant transition
       await wait(200)
 
-      const transition = document.startViewTransition(() => {
+      transition = document.startViewTransition(() => {
         if (image && background) {
           image.classList.remove('product-image')
           background.classList.remove('product-bg')
@@ -92,7 +94,7 @@ function handleHomeToProductTransition(navigateEvent, toPath) {
         }
       })
 
-      return transition.finished;
+      return transition.finished
     })
   }
 
@@ -110,7 +112,8 @@ function handleProductToHomeTransition(navigateEvent, toPath, fromPath) {
     let image
     let background
 
-    document.startViewTransition(() => {
+    document
+      .startViewTransition(() => {
         updateTheDOMSomehow(data)
 
         const link = getLink(fromPath)
@@ -123,7 +126,7 @@ function handleProductToHomeTransition(navigateEvent, toPath, fromPath) {
           image.scrollIntoViewIfNeeded()
         }
       })
-      finished.then(() => {
+      .finished.then(() => {
         if (image && background) {
           image.classList.remove('product-image')
           background.classList.remove('product-bg')
