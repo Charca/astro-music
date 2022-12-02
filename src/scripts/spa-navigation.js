@@ -39,14 +39,13 @@ navigation.addEventListener('navigate', (navigateEvent) => {
 
 function handleHomeToProductTransition(navigateEvent, toPath) {
   const handler = async () => {
-    if (!document.createDocumentTransition) {
+    if (!document.startViewTransition) {
       const data = await getFragment(toPath)
       updateTheDOMSomehow(data)
       return
     }
 
     return new Promise(async (resolve) => {
-      const transition = document.createDocumentTransition()
       const link = getLink(toPath)
       const image = link.querySelector('.product__img')
       const background = link.querySelector('.product__bg')
@@ -72,7 +71,7 @@ function handleHomeToProductTransition(navigateEvent, toPath) {
       // Grace period to make an instant transition
       await wait(200)
 
-      return transition.start(() => {
+      const transition = document.startViewTransition(() => {
         if (image && background) {
           image.classList.remove('product-image')
           background.classList.remove('product-bg')
@@ -92,27 +91,26 @@ function handleHomeToProductTransition(navigateEvent, toPath) {
           hasShownTemplate = true
         }
       })
+
+      return transition.finished;
     })
   }
 
-  navigateEvent.transitionWhile(handler())
+  navigateEvent.intercept({ handler })
 }
 
 function handleProductToHomeTransition(navigateEvent, toPath, fromPath) {
   const handler = async () => {
     const data = await getFragment(toPath)
 
-    if (!document.createDocumentTransition) {
+    if (!document.startViewTransition) {
       updateTheDOMSomehow(data)
       return
     }
-
-    const transition = document.createDocumentTransition()
     let image
     let background
 
-    transition
-      .start(() => {
+    document.startViewTransition(() => {
         updateTheDOMSomehow(data)
 
         const link = getLink(fromPath)
@@ -125,7 +123,7 @@ function handleProductToHomeTransition(navigateEvent, toPath, fromPath) {
           image.scrollIntoViewIfNeeded()
         }
       })
-      .then(() => {
+      finished.then(() => {
         if (image && background) {
           image.classList.remove('product-image')
           background.classList.remove('product-bg')
@@ -133,5 +131,5 @@ function handleProductToHomeTransition(navigateEvent, toPath, fromPath) {
       })
   }
 
-  navigateEvent.transitionWhile(handler())
+  navigateEvent.intercept({ handler })
 }

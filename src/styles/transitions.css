@@ -22,52 +22,52 @@
   }
 }
 
-::page-transition-outgoing-image(product-info) {
+::view-transition-old(product-info) {
   animation: 90ms cubic-bezier(0.4, 0, 1, 1) both fade-out,
     300ms cubic-bezier(0.4, 0, 0.2, 1) both slide-down;
 }
 
-::page-transition-incoming-image(product-info) {
+::view-transition-new(product-info) {
   animation: 210ms cubic-bezier(0, 0, 0.2, 1) 90ms both fade-in,
     300ms cubic-bezier(0.4, 0, 0.2, 1) both slide-up;
   animation-delay: 250ms;
 }
 
-::page-transition-outgoing-image(page-header),
-::page-transition-incoming-image(page-header) {
+::view-transition-old(page-header),
+::view-transition-new(page-header) {
   animation-duration: 0s;
 }
 
-::page-transition-container(page-header) {
+::view-transition-group(page-header) {
   z-index: 1;
 }
 
-::page-transition-container(product-image),
-::page-transition-container(close-button) {
+::view-transition-group(product-image),
+::view-transition-group(close-button) {
   z-index: 2;
 }
 
 .page-header {
-  page-transition-tag: page-header;
+  view-transition-name: page-header;
   contain: paint;
 }
 
 .product-image {
-  page-transition-tag: product-image;
+  view-transition-name: product-image;
   contain: paint;
 }
 
 .product-bg {
-  page-transition-tag: product-bg;
+  view-transition-name: product-bg;
   contain: paint;
 }
 
 .product-info {
-  page-transition-tag: product-info;
+  view-transition-name: product-info;
   contain: paint;
 }
 
 .close-button {
-  page-transition-tag: close-button;
+  view-transition-name: close-button;
   contain: paint;
 }
